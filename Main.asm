@@ -13,6 +13,10 @@ INCLUDE Irvine32.inc
 	;controls
 	player byte "0",0
 
+	;game choice
+	choice byte 0,0
+	again byte "WHAT DID YOU SAY?",0
+
 	;game messages
 	over1 byte " ________   ________",0
 	over2 byte "/  _____ | /  _____ |",0
@@ -55,7 +59,7 @@ main proc
 	call Clrscr
 	je board
 	
-	;player selects game
+	;game selection
 	mov eax, blue + (black * 16)
 	call SetTextColor
 	mov dl,40
@@ -65,6 +69,23 @@ main proc
 	call WriteString
 	call Clrscr
 	je board
+	;take in user input
+	;compare values to determine game
+	.if (choice == 1)
+		jmp game1
+	.endif
+;	.if (choice == 2)
+;		jmp game2
+;	.endif
+	.if (choice == 3)
+		jmp game3
+	.endif
+	.if (choice == 4)
+		jmp game4
+	.endif
+	.if (choice == 5)
+		jmp game5
+	.endif
 
 	invoke ExitProcess,0
 main endp
@@ -90,7 +111,7 @@ board:
 moveChar proc
 moveChar endp
 
-;games
+;cross the street minigame
 game1 PROC
 	;instructions
 	mov eax, blue + (green * 16)
@@ -100,6 +121,17 @@ game1 PROC
 	call WriteString
 game1 endp
 
+;find the suspect minigame
+;game2 PROC
+;	;instructions
+;	mov eax, blue + (green * 16)
+;	call SetTextColor
+;	call GotoXY
+;	mov edx,OFFSET g2
+;	call WriteString
+;game2 endp
+
+;feed the dog minigame
 game3 PROC
 	;instructions
 	mov eax, blue + (green * 16)
@@ -109,6 +141,7 @@ game3 PROC
 	call WriteString
 game3 endp
 
+;present the speech minigame
 game4 PROC
 	;instructions
 	mov eax, blue + (black * 16)
@@ -118,6 +151,7 @@ game4 PROC
 	call WriteString
 game4 endp
 
+;kick the ball minigame
 game5 PROC
 	;instructions
 	mov eax, blue + (black * 16)
