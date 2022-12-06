@@ -232,13 +232,9 @@ game3 PROC
 
 	;game
 	je feedDog
-	je board
 	je feedDog
-	je board
 	je feedDog
-	je board
 	je feedDog
-	je board
 	je feedDog
 
 	;go to next game
