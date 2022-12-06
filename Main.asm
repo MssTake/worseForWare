@@ -53,7 +53,6 @@ main proc
 	call Delay
 
 	;instructions
-	call Clrscr
 	je board
     mov eax, red + (black * 16)
 	call SetTextColor
@@ -66,13 +65,13 @@ main proc
 	call Delay
 
 	;start game
-	call Clrscr
 	je board
 	jmp game1
 main endp
 
 ;game board
 board:
+	call Clrscr
 	;top row
 	mov eax, yellow + (black * 16)
 	call SetTextColor
@@ -164,41 +163,31 @@ game1 PROC
 	call WriteString
 	mov eax, 456
 	call Delay
+
 	;move character loop
 	mov dl,40
 	mov dh,7
 	je moveChar
 	je board
-	call Clrscr
 	je moveChar
 	je board
-	call Clrscr
 	je moveChar
 	je board
-	call Clrscr
 	je moveChar
 	je board
-	call Clrscr
 	je moveChar
 	je board
-	call Clrscr
 	je moveChar
 	je board
-	call Clrscr
 	je moveChar
 	je board
-	call Clrscr
 	je moveChar
 	je board
-	call Clrscr
 	je moveChar
 	je board
-	call Clrscr
 	je moveChar
-	je board
-	call Clrscr
+
 	;go to next game
-	call Clrscr
 	je board
 	jmp game3
 game1 endp
@@ -229,13 +218,19 @@ game3 PROC
 	call WriteString
 	mov eax, 456
 	call Delay
+
+	;game
 	je feedDog
+	je board
 	je feedDog
+	je board
 	je feedDog
+	je board
 	je feedDog
+	je board
 	je feedDog
+
 	;go to next game
-	call Clrscr
 	je board
 	jmp game4
 game3 endp
@@ -252,14 +247,16 @@ game4 PROC
 	call WriteString
 	mov eax, 456
 	call Delay
+
 	;game
 	je present
 	je present
 	je present
 	je present
 	je present
+
 	;go to next game
-	call Clrscr
+
 	je board
 	jmp game5
 game4 endp
@@ -276,10 +273,11 @@ game5 PROC
 	call WriteString
 	mov eax,456
 	call Delay
+
 	;game 
 	je kicking
+
 	;go to next game
-	call Clrscr
 	je board
 	jmp game1
 game5 endp
