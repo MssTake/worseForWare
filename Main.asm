@@ -42,7 +42,7 @@ INCLUDE Irvine32.inc
 main proc
 	;welcome screen
 	je board
-    mov eax, red + (black * 16)
+    mov eax, green
 	call SetTextColor
 	mov dl,40
 	mov dh,12
@@ -54,7 +54,7 @@ main proc
 
 	;instructions
 	je board
-    mov eax, red + (black * 16)
+    mov eax, green
 	call SetTextColor
 	mov dl,40
 	mov dh,12
@@ -73,7 +73,7 @@ main endp
 board:
 	call Clrscr
 	;top row
-	mov eax, yellow + (black * 16)
+	mov eax, yellow
 	call SetTextColor
 	mov dl,1
 	mov dh,17
@@ -81,13 +81,20 @@ board:
 	mov edx,OFFSET row
 	call WriteString
 	;bottom row
-    mov eax, yellow + (black * 16)
+    mov eax, yellow
 	call SetTextColor
 	mov dl,1
 	mov dh,7
 	call GotoXY
 	mov edx,OFFSET row
 	call WriteString
+	ret
+
+;text setups
+setInfo:
+ret
+setGame:
+ret
 
 ;moving character
 moveChar:
@@ -96,13 +103,14 @@ moveChar:
 	mov inputChar,al
 	cmp inputChar,"w"
 	;program writes action
-    mov eax, yellow + (black * 16)
+    mov eax, yellow
 	call SetTextColor
 	mov dl,40
 	add dh,1
 	call GotoXY
 	mov edx,OFFSET unit
 	call WriteString
+	ret
 
 ;finding suspect
 
@@ -113,13 +121,14 @@ feedDog:
 	mov inputChar,al
 	cmp inputChar,"w"
 	;program writes action
-    mov eax, yellow + (black * 16)
+    mov eax, yellow
 	call SetTextColor
 	mov dl,40
 	mov dh,7
 	call GotoXY
 	mov edx,OFFSET unit
 	call WriteString
+	ret
 
 ;presenting speech
 present:
@@ -128,13 +137,14 @@ present:
 	mov inputChar,al
 	cmp inputChar,"w"
 	;program writes action
-    mov eax, yellow + (black * 16)
+    mov eax, yellow
 	call SetTextColor
 	mov dl,40
 	mov dh,7
 	call GotoXY
 	mov edx,OFFSET speech
 	call WriteString
+	ret
 
 ;kicking ball
 kicking:
@@ -143,18 +153,19 @@ kicking:
 	mov inputChar,al
 	cmp inputChar,"w"
 	;program writes action
-    mov eax, yellow + (black * 16)
+    mov eax, yellow
 	call SetTextColor
 	mov dl,40
 	mov dh,3
 	call GotoXY
 	mov edx,OFFSET ball
 	call WriteString
+	ret
 
 ;cross the street minigame
 game1 PROC
 	;instructions
-	mov eax, green + (black * 16)
+	mov eax, green
 	call SetTextColor
 	mov dl,40
 	mov dh,17
@@ -195,7 +206,7 @@ game1 endp
 ;find the suspect minigame
 ;game2 PROC
 ;	;instructions
-;	mov eax, green + (black * 16)
+;	mov eax, green
 ;	call SetTextColor
 ;	mov dl,40
 ;	mov dh,7
@@ -209,7 +220,7 @@ game1 endp
 ;feed the dog minigame
 game3 PROC
 	;instructions
-	mov eax, green + (black * 16)
+	mov eax, green
 	call SetTextColor
 	mov dl,40
 	mov dh,7
@@ -238,7 +249,7 @@ game3 endp
 ;present the speech minigame
 game4 PROC
 	;instructions
-	mov eax, green + (black * 16)
+	mov eax, green
 	call SetTextColor
 	mov dl,40
 	mov dh,7
@@ -264,7 +275,7 @@ game4 endp
 ;kick the ball minigame
 game5 PROC
 	;instructions
-	mov eax, green + (black * 16)
+	mov eax, green
 	call SetTextColor
 	mov dl,40
 	mov dh,7
