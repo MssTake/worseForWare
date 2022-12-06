@@ -2,16 +2,17 @@ INCLUDE Irvine32.inc
 .data
 	;board
 	row BYTE "////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
-
+	blank BYTE "                                                                                                                        "
+	player BYTE "                                                     0                                                                  "
+	dogFood byte "0",0
+	speech byte "words ",0
+	ball byte "O",0
 	; score
 	score BYTE 0,0
 	inputChar BYTE ?
 
 	;lives
 	lives BYTE 0,0
-	
-	;controls
-	player byte "0",0
 
 	;game choice
 	choice byte 0,0
@@ -34,6 +35,7 @@ INCLUDE Irvine32.inc
 	lose7 byte " /___/       |________|  |__| \__\ |_______|  |______|",0
 	welcome byte "WELC^^O^^ME T^^0^^ W^^O^^RSE F^^O^^R WARE",0
 	select byte "CHOOSE A NUMBER FROM 1 - 5",0
+	controls byte "All actions are completed with the action button (w)"
 	g1 BYTE "CROSS THE STREET",0
 	;g2 BTYE "FIND THE SUSPECT",0
 	g3 BYTE "FEED THE DOG",0
@@ -70,6 +72,12 @@ main proc
 	call Clrscr
 	je board
 	;take in user input
+	call ReadChar
+	mov inputChar,al
+	cmp inputChar,"2"
+	cmp inputChar,"3"
+	cmp inputChar,"4"
+	cmp inputChar,"5"
 	;compare values to determine game
 	.if (choice == 1)
 		jmp game1
@@ -92,6 +100,11 @@ main endp
 
 ;game board
 board:
+	;allocating space for the top
+	mov edx,OFFSET blank
+	call WriteString
+	call WriteString
+	call WriteString
 	;top row
 	mov eax, yellow + (black * 16)
 	call SetTextColor
@@ -108,8 +121,37 @@ board:
 	call WriteString
 
 ;moving character
-moveChar proc
-moveChar endp
+moveChar:
+	;player selects action button
+	call ReadChar
+	mov inputChar,al
+	cmp inputChar,"w"
+	;player moves foreward
+    mov eax, yellow + (black * 16)
+	call SetTextColor
+	add dh,1
+	call GotoXY
+	mov edx,OFFSET player
+	call WriteString
+
+;finding suspect
+
+;feeding dog
+feedDog:
+	;player selects action button
+	call ReadChar
+	mov inputChar,al
+	cmp inputChar,"w"
+    mov eax, yellow + (black * 16)
+	call SetTextColor
+	add dh,1
+	call GotoXY
+	mov edx,OFFSET dogFood
+	call WriteString
+
+;presenting speech
+
+;kicking ball
 
 ;cross the street minigame
 game1 PROC
@@ -119,6 +161,20 @@ game1 PROC
 	call GotoXY
 	mov edx,OFFSET g1
 	call WriteString
+	;move character loop
+	je moveChar
+	je moveChar
+	je moveChar
+	je moveChar
+	je moveChar
+	je moveChar
+	je moveChar
+	je moveChar
+	je moveChar
+	;go to next game
+	call Clrscr
+	je board
+	jmp game3
 game1 endp
 
 ;find the suspect minigame
@@ -139,6 +195,15 @@ game3 PROC
 	call GotoXY
 	mov edx,OFFSET g3
 	call WriteString
+	je feedDog
+	je feedDog
+	je feedDog
+	je feedDog
+	je feedDog
+	;go to next game
+	call Clrscr
+	je board
+	jmp game4
 game3 endp
 
 ;present the speech minigame
@@ -149,6 +214,10 @@ game4 PROC
 	call GotoXY
 	mov edx,OFFSET g4
 	call WriteString
+	;go to next game
+	call Clrscr
+	je board
+	jmp game5
 game4 endp
 
 ;kick the ball minigame
@@ -159,6 +228,10 @@ game5 PROC
 	call GotoXY
 	mov edx,OFFSET g5
 	call WriteString
+	;go to next game
+	call Clrscr
+	je board
+	jmp game1
 game5 endp
 
 end main
