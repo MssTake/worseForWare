@@ -81,9 +81,20 @@ main endp
 
 ;mechanics-------------------------------------
 
+;record start time
+startTime
+	INVOKE GetDateTime,ADDR dateTime
+	mov time1,edx
+ret
+
+; record end time
+endTime
+	INVOKE GetDateTime,ADDR dateTime
+	mov time2,edx
+ret
+
 ;time to complete game successfully
 timer:
-	;record start and completion time
 	;subtract the times
 	mov eax,time2
 	sub eax,time1
