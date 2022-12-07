@@ -2,43 +2,47 @@
 .data
 
 ;board
-row byte "////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
-bottom1 byte "____                     ________                     ____ ",0
-bottom1 byte "\   \\    _____     ____/||||||||\___     ______     /  // ",0
-bottom1 byte " \   \\  /     \\  /   /||||||||||\  \\  /      \\  /  //  ",0
-bottom1 byte "  \   \\/   /\  \\/  //||||||||||||\  \\/  //\   \\/  //   ",0
-bottom1 byte "   \       // \     // \||||||||||/ \     //  \      //    ",0
-bottom1 byte "    \_____//   \___//   \||||||||/   \___//    \____//     ",0
+row byte "///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
+bottom1 byte "_____                                           ____ ",0
+bottom2 byte "\    \    _____     ____    ____    _______    ///// ",0
+bottom3 byte " \    \  /////  \  /////    \   \  /////   \  /////  ",0
+bottom4 byte "  \    \/////\   \/////      \   \/////\    \/////   ",0
+bottom5 byte "   \   /////  \  /////        \  /////  \   /////    ",0
+bottom6 byte "    \_/////    \/////          \/////    \_/////     ",0
 unit byte "0",0
 speech byte "words ",0
 ball byte "O",0
 
 ; score
 score byte 0,0
-inputChar byte ?
+
+;time reader
+time1 byte 0,0
+time2 byte 0,0
+dateTime FILETIME <>
 
 ;lives
 lives byte 0,0
-lose1 byte "__     _____   _________    __   __    ________    _______   ",0
-lose2 byte "\ \   /   //  |__    __||  |  | / //  |   ____||  /   ___ \\ ",0
-lose3 byte " \ \ /   //      |  ||     |  |/ //   |  ||__     \   \\  \||",0
-lose4 byte "  \ /   //       |  ||     |  | \\    |   __||     \    \\   ",0
-lose5 byte "   /   //        |  ||     |  |  \\   |  ||          \    \\ ",0
-lose6 byte "  /   //       __|  ||__   |  |\  \\  |  ||____   | \/    || ",0
-lose7 byte " /___//       |________||  |__| \__\\ |_______||  \_______// ",0
+lose1 byte "__      ____   _________    __   __     ________   ______   ",0
+lose2 byte "\\\\   /////  |||||||||||  |||| ///    |||||||||  //|||||\  ",0
+lose3 byte " \\\\ /////      |||||     ||||///     |||||__    \\\\\ \|| ",0
+lose4 byte "  \\\/////       |||||     ||||\\\     ||||||||    \\\\\\   ",0
+lose5 byte "   \/////        |||||     ||||\\\\    |||||         \\\\\\ ",0
+lose6 byte "   /////       __|||||__   ||||\\\\\   |||||____  \\\///////",0
+lose7 byte "  /////       |||||||||||  |||| \\\\\  |||||||||   \\////// ",0
 
 ;game over
-over1 byte "  ________    ________  ",0
-over2 byte "//  _____ | //  _____ | ",0
-over3 byte "||  |   \\| ||  |   \\| ",0
-over4 byte "||  | _____ ||  |  _____",0
-over5 byte "||  |  || | ||  |   || |",0
-over6 byte "||  |__|| | ||  |___|| |",0
-over7 byte "||________| ||_________|",0
+over1 byte " _________    _________  ",0
+over2 byte "////////|||  ////////||| ",0
+over3 byte "|||||   \\|  |||||   \\| ",0
+over4 byte "||||| _____  |||||  _____",0
+over5 byte "|||||  ||||  |||||   ||||",0
+over6 byte "|||||__||||  |||||___||||",0
+over7 byte "\|||||||||/  \|||||||||/ ",0
 
 ;script
 welcome byte "WELCOME TOᵂ WORSE FOR WARE",0 
-controls byte "All actions are completed with the action button"
+controls byte "All actions are completed with the action button (any key)"
 g1 byte "CROSS THE STREET",0
 g2 BTYE "FIND THE SUSPECT",0
 g3 byte "FEED THE DOG",0
@@ -46,8 +50,10 @@ g4 byte "PRESENT THE SPEECH",0
 g5 byte "KICK THE BALL",0
 
 .code
-main proc
 
+;main-------------------------------------
+
+main proc
 	;welcome screen
 	je board
 	je setInfo
@@ -69,29 +75,21 @@ main proc
 	jmp game1
 main endp
 
-;game board
-board:
-	call Clrscr
+;mechanics-------------------------------------
 
-	;top row
-	mov eax, yellow
-	call SetTextColor
-	mov dl,1
-	mov dh,17
-	call GotoXY
-	mov edx,OFFSET row
-	call WriteString
+;completion timer decreases
+timer:
+ret
 
-	;bottom row
-    mov eax, yellow
-	call SetTextColor
-	mov dl,1
-	mov dh,7
-	call GotoXY
-	mov edx,OFFSET row
-	call WriteString
+;player loses a life
+lose:
+ret
 
-	ret
+;you lost the game
+lost:
+ret
+
+;formatting-------------------------------------
 
 ;info text format
 setInfo:
@@ -111,8 +109,67 @@ setGame:
 	call GotoXY
 ret
 
+;board textformat
+setBoard:
+	mov eax, yellow
+	call SetTextColor
+	mov dl,1
+ret
+
+;game board
+board:
+	call Clrscr
+
+	;top row
+	je setBoard
+	mov dh,17
+	call GotoXY
+	mov edx,OFFSET row
+	call WriteString
+
+	;bottom row
+    je setBoard
+	mov dh,7
+	call GotoXY
+	mov edx,OFFSET row
+	call WriteString
+
+	;the ws
+	je setBoard
+	mov dh,1
+	call GotoXY
+	mov edx,OFFSET bottom6
+	call WriteString
+	mov dh,2
+	call GotoXY
+	mov edx,OFFSET bottom5
+	call WriteString
+	call WriteString
+	mov dh,3
+	call GotoXY
+	mov edx,OFFSET bottom4
+	call WriteString
+	call WriteString
+	mov dh,4
+	call GotoXY
+	mov edx,OFFSET bottom3
+	call WriteString
+	call WriteString
+	mov dh,5
+	call GotoXY
+	mov edx,OFFSET bottom2
+	call WriteString
+	call WriteString
+	mov dh,6
+	call GotoXY
+	mov edx,OFFSET bottom1
+	call WriteString
+ret
+
+;gameplay-------------------------------------
+
 ;moving character
-moveChar:
+action1:
 	;player selects action
 	call ReadChar
 	mov inputChar,al
@@ -123,7 +180,7 @@ moveChar:
 ret
 
 ;finding suspect
-;find:
+;action2:
 ;	;player does action
 ;	call ReadChar
 ;	mov inputChar,al
@@ -134,7 +191,7 @@ ret
 ;ret
 
 ;feeding dog
-feedDog:
+action3:
 	;player does action
 	call ReadChar
 	mov inputChar,al
@@ -146,7 +203,7 @@ feedDog:
 	ret
 
 ;presenting speech
-present:
+action4:
 	;player does action
 	call ReadChar
 	mov inputChar,al
@@ -158,7 +215,7 @@ present:
 	ret
 
 ;kicking ball
-kicking:
+action5:
 	;player does action
 	call ReadChar
 	mov inputChar,al
@@ -170,10 +227,12 @@ kicking:
 	mov eax, 456
 ret
 
+;minigames-------------------------------------
+
 ;cross the street minigame
 game1 proc
 	;instructions
-	je set info
+	je setInfo
 	mov edx,OFFSET g1
 	call WriteString
 	mov eax, 456
@@ -182,25 +241,25 @@ game1 proc
 	;move character loop
 	mov dl,40
 	mov dh,7
-	je moveChar
+	je action1
 	je board
-	je moveChar
+	je action1
 	je board
-	je moveChar
+	je action1
 	je board
-	je moveChar
+	je action1
 	je board
-	je moveChar
+	je action1
 	je board
-	je moveChar
+	je action1
 	je board
-	je moveChar
+	je action1
 	je board
-	je moveChar
+	je action1
 	je board
-	je moveChar
+	je action1
 	je board
-	je moveChar
+	je action1
 	mov eax, 456
 	call Delay
 
@@ -211,7 +270,7 @@ game1 endp
 
 ;find the suspect minigame
 ;game2 proc
-;	je set info
+;	je setInfo
 ;	mov edx,OFFSET g2
 ;	call WriteString
 ;	mov eax, 456
@@ -221,18 +280,18 @@ game1 endp
 ;feed the dog minigame
 game3 proc
 	;instructions
-	je set info
+	je setInfo
 	mov edx,OFFSET g3
 	call WriteString
 	mov eax, 456
 	call Delay
 
 	;game
-	je feedDog
-	je feedDog
-	je feedDog
-	je feedDog
-	je feedDog
+	je action3
+	je action3
+	je action3
+	je action3
+	je action3
 	mov eax, 456
 	call Delay
 
@@ -244,18 +303,18 @@ game3 endp
 ;present the speech minigame
 game4 proc
 	;instructions
-	je set info
+	je setInfo
 	mov edx,OFFSET g4
 	call WriteString
 	mov eax, 456
 	call Delay
 
 	;game
-	je present
-	je present
-	je present
-	je present
-	je present
+	je action4
+	je action4
+	je action4
+	je action4
+	je action4
 	mov eax, 456
 	call Delay
 
@@ -267,14 +326,14 @@ game4 endp
 ;kick the ball minigame
 game5 proc
 	;instructions
-	je set info
+	je setInfo
 	mov edx,OFFSET g5
 	call WriteString
 	mov eax,456
 	call Delay
 
 	;game 
-	je kicking
+	je action5
 	mov eax, 456
 	call Delay
 
@@ -282,8 +341,5 @@ game5 proc
 	je board
 	jmp game1
 game5 endp
-
-;player loses a life
-;you lost the game
 
 end main
