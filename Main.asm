@@ -19,10 +19,12 @@ score byte 0,0
 ;time reader
 time1 byte 0,0
 time2 byte 0,0
+time3 byte 0,0
+timeTarget byte 5000,0
 dateTime FILETIME <>
 
 ;lives
-lives byte 0,0
+lives byte 4,0
 lose1 byte "__      ____   _________    __   __     ________   ______   ",0
 lose2 byte "\\\\   /////  |||||||||||  |||| ///    |||||||||  //|||||\  ",0
 lose3 byte " \\\\ /////      |||||     ||||///     |||||__    \\\\\ \|| ",0
@@ -30,6 +32,8 @@ lose4 byte "  \\\/////       |||||     ||||\\\     ||||||||    \\\\\\   ",0
 lose5 byte "   \/////        |||||     ||||\\\\    |||||         \\\\\\ ",0
 lose6 byte "   /////       __|||||__   ||||\\\\\   |||||____  \\\///////",0
 lose7 byte "  /////       |||||||||||  |||| \\\\\  |||||||||   \\////// ",0
+retGame1 byte "LETS TRY AGAIN!",0
+retGame2 byte "FROM THE TOP!",0
 
 ;game over
 over1 byte " _________    _________  ",0
@@ -77,16 +81,69 @@ main endp
 
 ;mechanics-------------------------------------
 
-;completion timer decreases
+;time to complete game successfully
 timer:
+	;record start and completion time
+	;subtract the times
+	mov eax,time2
+	sub eax,time1
+	mov time3,eax
+	;player loses a life if completed over 5 seconds
+	.if (time3 > timeTarget)
+		je lose
+	.endif
 ret
 
 ;player loses a life
 lose:
+	;show lost a life message
+	je board
+	je setInfo
+
+	;show previous lives
+	je board
+	je setInfo
+	mov edx, OFFSET lives
+	call WriteString
+
+	;subtract lives by 1
+	mov eax,lives
+	sub eax,1
+	mov lives,eax
+
+	;show current lives
+	je board
+	je setInfo
+	mov edx, OFFSET lives
+	call WriteString
+
+	;if out of lives end game
+	.if (lives == 0)
+		jmp main
+	;else send to game1
+	.else
+		je setInfo
+		mov edx, OFFSET retGame1
+		call WriteString
+		mov eax, 1000
+		call Delay
+		je board
+		je setInfo
+		mov edx, OFFSET retGame2
+		call WriteString
+		mov eax, 1000
+		call Delay
+		je board
+		je game1
+	.endif
 ret
 
 ;you lost the game
 lost:
+	;lose game message
+	mov eax, 5000
+	Call Delay
+	;end program
 ret
 
 ;formatting-------------------------------------
@@ -231,6 +288,7 @@ ret
 
 ;cross the street minigame
 game1 proc
+
 	;instructions
 	je setInfo
 	mov edx,OFFSET g1
