@@ -17,10 +17,10 @@ ball byte "O",0
 score byte 0,0
 
 ;time reader
-time1 byte 0,0
-time2 byte 0,0
-time3 byte 0,0
-timeTarget byte 5000,0
+time1 dword ?
+time2 dword ?
+time3 dword ?
+timeTarget dword ?,0
 dateTime FILETIME <>
 
 ;lives
@@ -32,8 +32,8 @@ lose4 byte "  \\\/////       |||||     ||||\\\     ||||||||    \\\\\\   ",0
 lose5 byte "   \/////        |||||     ||||\\\\    |||||         \\\\\\ ",0
 lose6 byte "   /////       __|||||__   ||||\\\\\   |||||____  \\\///////",0
 lose7 byte "  /////       |||||||||||  |||| \\\\\  |||||||||   \\////// ",0
-retGame1 byte "LETS TRY AGAIN!",0
-retGame2 byte "FROM THE TOP!",0
+retGame1 byte "LETS TRY AGAIN",0
+retGame2 byte "FROM THE TOP",0
 
 ;game over
 over1 byte " _________    _________  ",0
@@ -57,7 +57,7 @@ g5 byte "KICK THE BALL",0
 
 ;main-------------------------------------
 
-main proc
+main PROC
 	;welcome screen
 	je board
 	je setInfo
@@ -77,19 +77,22 @@ main proc
 	;start game
 	je board
 	jmp game1
-main endp
+main ENDP
 
 ;mechanics-------------------------------------
 
-;record start time
+;record start time and create target
 startTime
-	INVOKE GetDateTime,ADDR dateTime
+	INVOKE GetDateTime,edx dateTime
 	mov time1,edx
+	;set time target
+	add timeTarget,time1
+	add timeTarget,50000000
 ret
 
 ; record end time
 endTime
-	INVOKE GetDateTime,ADDR dateTime
+	INVOKE GetDateTime,edx dateTime
 	mov time2,edx
 ret
 
@@ -100,7 +103,7 @@ timer:
 	sub eax,time1
 	mov time3,eax
 	;player loses a life if completed over 5 seconds
-	.if (time3 > timeTarget)
+	.if time3 > timeTarget
 		je lose
 	.endif
 ret
@@ -118,9 +121,9 @@ lose:
 	call WriteString
 
 	;subtract lives by 1
-	mov eax,lives
-	sub eax,1
-	mov lives,eax
+	mov ecx,lives
+	sub ecx,1
+	mov lives,edx
 
 	;show current lives
 	je board
