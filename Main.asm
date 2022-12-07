@@ -36,13 +36,13 @@ retGame1 byte "LETS TRY AGAIN",0
 retGame2 byte "FROM THE TOP",0
 
 ;game over
-over1 byte " _________    _________  ",0
-over2 byte "////////|||  ////////||| ",0
-over3 byte "|||||   \\|  |||||   \\| ",0
-over4 byte "||||| _____  |||||  _____",0
-over5 byte "|||||  ||||  |||||   ||||",0
-over6 byte "|||||__||||  |||||___||||",0
-over7 byte "\|||||||||/  \|||||||||/ ",0
+over1 byte " _________     _________  ",0
+over2 byte "////////|||   ////////||| ",0
+over3 byte "|||||   \\|   |||||   \\| ",0
+over4 byte "|||||  _____  |||||  _____",0
+over5 byte "|||||   ||||  |||||   ||||",0
+over6 byte "|||||___||||  |||||___||||",0
+over7 byte " \||||||||/    \||||||||/ ",0
 
 ;script
 welcome byte "WELCOME TOᵂ WORSE FOR WARE",0 
