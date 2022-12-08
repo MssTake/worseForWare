@@ -1,10 +1,16 @@
-﻿.386	
+﻿;.386	
 ;.model flat, stdcall
 include Irvine32.inc
-includelib Irvine32.lib
-include Macros.inc
-.stack 4096
-ExitProcess proto, dwExitCode:dword
+;includelib Irvine32.lib
+;include Macros.inc
+;.stack 4096
+;ExitProcess proto, dwExitCode:dword
+
+;irvine library time
+FILETIME STRUCT
+    loDateTime DWORD ?
+    hiDateTime DWORD ?
+FILETIME ENDS
 .data
 
 ;board
@@ -20,8 +26,9 @@ speech byte "words ",0
 ball byte "O",0
 
 ; score
-score byte 0,0
-inputChar BYTE ?
+score dword ?
+finalScore byte "FINAL SCORE: "
+inputChar byte ?
 
 ;time reader
 time1 dword ?,0
@@ -118,6 +125,10 @@ timer proc
 	;player loses a life if completed over 5 seconds
 	.if (time3 GT timeTarget)
 		jmp lose
+	;player earns one point
+	.else
+	mov edx,1
+	add score,edx
 	.endif
 timer endp
 
@@ -206,8 +217,18 @@ lose endp
 
 ;you lost the game
 lost proc
+	;show final score
+	jmp setBoard
+	jmp board
+	jmp setInfo
+	mov edx, OFFSET finalScore
+	call WriteString
+	jmp setInfo
+	mov edx,score
+	call WriteString
+
 	;lose game message
-		jmp setBoard
+	jmp setBoard
 	jmp board
 	jmp setInfo
 	mov dh,1
@@ -292,7 +313,7 @@ board proc
 	mov edx,OFFSET row
 	call WriteString
 
-	;the ws
+	;the two Ws
 	jmp setBoard
 	mov dh,1
 	call GotoXY
