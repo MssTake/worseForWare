@@ -1,4 +1,4 @@
-﻿;.386	
+;.386	
 ;.model flat, stdcall
 include Irvine32.inc
 ;includelib Irvine32.lib
@@ -11,6 +11,7 @@ FILETIME STRUCT
     loDateTime DWORD ?
     hiDateTime DWORD ?
 FILETIME ENDS
+
 .data
 
 ;board
@@ -70,8 +71,7 @@ g5 byte "KICK THE BALL",0
 .code
 
 ;main-------------------------------------
-
-main PROC
+main proc
 	;start with four lives
 	mov edx,4
 	mov lives,edx
@@ -95,7 +95,189 @@ main PROC
 	;start game
 	jmp board
 	jmp game1
-main ENDP
+main endp
+
+;minigames-------------------------------------
+
+;cross the street minigame
+game1 proc
+	;instructions
+	jmp setInfo
+	mov edx,OFFSET g1
+	call WriteString
+	mov eax, 456
+	call Delay
+	;game
+	jmp startTime
+	mov dl,40
+	mov dh,7
+	je action1
+	jmp board
+	je action1
+	jmp board
+	je action1
+	jmp board
+	je action1
+	jmp board
+	je action1
+	jmp board
+	je action1
+	jmp board
+	je action1
+	jmp board
+	je action1
+	jmp board
+	je action1
+	jmp board
+	je action1
+	mov eax, 456
+	call Delay
+	jmp board
+	je endTime
+	;go to next game
+	jmp board
+	jmp game3
+game1 endp
+
+;find the suspect minigame
+;game2 proc
+	;instructions
+;	jmp setInfo
+;	mov edx,OFFSET g2
+;	call WriteString
+;	mov eax, 456
+;	call Delay
+	;game
+;game2 endp
+
+;feed the dog minigame
+game3 proc
+	;instructions
+	jmp setInfo
+	mov edx,OFFSET g3
+	call WriteString
+	mov eax, 456
+	call Delay
+	;game
+	jmp startTime
+	je action3
+	je action3
+	je action3
+	je action3
+	je action3
+	mov eax, 456
+	call Delay
+	jmp board
+	je endTime
+	;go to next game
+	jmp board
+	jmp game4
+game3 endp
+
+;present the speech minigame
+game4 proc
+	;instructions
+	jmp setInfo
+	mov edx,OFFSET g4
+	call WriteString
+	mov eax, 456
+	call Delay
+	;game
+	jmp startTime
+	je action4
+	je action4
+	je action4
+	je action4
+	je action4
+	mov eax, 456
+	call Delay
+	jmp board
+	je endTime
+	;go to next game
+	jmp board
+	jmp game5
+game4 endp
+
+;kick the ball minigame
+game5 proc
+	;instructions
+	jmp setInfo
+	mov edx,OFFSET g5
+	call WriteString
+	mov eax,456
+	call Delay
+	;game 
+	jmp startTime
+	je action5
+	mov eax, 456
+	call Delay
+	jmp board
+	je endTime
+	;go to next game
+	jmp board
+	jmp game1
+game5 endp
+
+;gameplay-------------------------------------
+
+;moving character
+action1:
+	;player selects action
+	call ReadChar
+	mov inputChar,al
+	;program writes action
+	jmp setGame
+	mov edx,OFFSET unit
+	call WriteString
+ret
+
+;finding suspect
+;action2:
+;	;player does action
+;	call ReadChar
+;	mov inputChar,al
+;	;program writes action
+;	jmp setGame
+;	mov edx,OFFSET unit
+;	call WriteString
+;ret
+
+;feeding dog
+action3:
+	;player does action
+	call ReadChar
+	mov inputChar,al
+
+	;program writes action
+	jmp setGame
+	mov edx,OFFSET unit
+	call WriteString
+ret
+
+;presenting speech
+action4:
+	;player does action
+	call ReadChar
+	mov inputChar,al
+
+	;program writes action
+	jmp setGame
+	mov edx,OFFSET speech
+	call WriteString
+ret
+
+;kicking ball
+action5:
+	;player does action
+	call ReadChar
+	mov inputChar,al
+
+	;program writes action
+	jmp setGame
+	mov edx,OFFSET ball
+	call WriteString
+	mov eax, 456
+ret
 
 ;mechanics-------------------------------------
 
@@ -172,7 +354,6 @@ lose proc
 	call WriteString
 	mov eax, 456
 	call Delay
-
 	;show previous lives
 	jmp board
 	jmp setInfo
@@ -180,12 +361,10 @@ lose proc
 	call WriteString
 	mov eax, 456
 	call Delay
-
 	;subtract lives by 1
 	mov edx,lives
 	sub edx,1
 	mov lives,edx
-
 	;show current lives
 	jmp board
 	jmp setInfo
@@ -193,7 +372,6 @@ lose proc
 	call WriteString
 	mov eax, 456
 	call Delay
-
 	;if out of lives end game
 	.if (lives == 0)
 		jmp lost
@@ -226,7 +404,6 @@ lost proc
 	jmp setInfo
 	mov edx,score
 	call WriteString
-
 	;lose game message
 	jmp setBoard
 	jmp board
@@ -298,21 +475,18 @@ setBoard endp
 ;game board
 board proc
 	call Clrscr
-
 	;top row
 	jmp setBoard
 	mov dh,17
 	call GotoXY
 	mov edx,OFFSET row
 	call WriteString
-
 	;bottom row
     jmp setBoard
 	mov dh,7
 	call GotoXY
 	mov edx,OFFSET row
 	call WriteString
-
 	;the two Ws
 	jmp setBoard
 	mov dh,1
@@ -344,197 +518,5 @@ board proc
 	mov edx,OFFSET bottom1
 	call WriteString
 board endp
-
-;gameplay-------------------------------------
-
-;moving character
-action1:
-	;player selects action
-	call ReadChar
-	mov inputChar,al
-	;program writes action
-	jmp setGame
-	mov edx,OFFSET unit
-	call WriteString
-ret
-
-;finding suspect
-;action2:
-;	;player does action
-;	call ReadChar
-;	mov inputChar,al
-;	;program writes action
-;	jmp setGame
-;	mov edx,OFFSET unit
-;	call WriteString
-;ret
-
-;feeding dog
-action3:
-	;player does action
-	call ReadChar
-	mov inputChar,al
-
-	;program writes action
-	jmp setGame
-	mov edx,OFFSET unit
-	call WriteString
-ret
-
-;presenting speech
-action4:
-	;player does action
-	call ReadChar
-	mov inputChar,al
-
-	;program writes action
-	jmp setGame
-	mov edx,OFFSET speech
-	call WriteString
-ret
-
-;kicking ball
-action5:
-	;player does action
-	call ReadChar
-	mov inputChar,al
-
-	;program writes action
-	jmp setGame
-	mov edx,OFFSET ball
-	call WriteString
-	mov eax, 456
-ret
-
-;minigames-------------------------------------
-
-;cross the street minigame
-game1 proc
-
-	;instructions
-	jmp setInfo
-	mov edx,OFFSET g1
-	call WriteString
-	mov eax, 456
-	call Delay
-
-	;game
-	jmp startTime
-	mov dl,40
-	mov dh,7
-	je action1
-	jmp board
-	je action1
-	jmp board
-	je action1
-	jmp board
-	je action1
-	jmp board
-	je action1
-	jmp board
-	je action1
-	jmp board
-	je action1
-	jmp board
-	je action1
-	jmp board
-	je action1
-	jmp board
-	je action1
-	mov eax, 456
-	call Delay
-	jmp board
-	je endTime
-
-	;go to next game
-	jmp board
-	jmp game3
-game1 endp
-
-;find the suspect minigame
-;game2 proc
-	;instructions
-;	jmp setInfo
-;	mov edx,OFFSET g2
-;	call WriteString
-;	mov eax, 456
-;	call Delay
-
-	;game
-;game2 endp
-
-;feed the dog minigame
-game3 proc
-	;instructions
-	jmp setInfo
-	mov edx,OFFSET g3
-	call WriteString
-	mov eax, 456
-	call Delay
-
-	;game
-	jmp startTime
-	je action3
-	je action3
-	je action3
-	je action3
-	je action3
-	mov eax, 456
-	call Delay
-	jmp board
-	je endTime
-
-	;go to next game
-	jmp board
-	jmp game4
-game3 endp
-
-;present the speech minigame
-game4 proc
-	;instructions
-	jmp setInfo
-	mov edx,OFFSET g4
-	call WriteString
-	mov eax, 456
-	call Delay
-
-	;game
-	jmp startTime
-	je action4
-	je action4
-	je action4
-	je action4
-	je action4
-	mov eax, 456
-	call Delay
-	jmp board
-	je endTime
-
-	;go to next game
-	jmp board
-	jmp game5
-game4 endp
-
-;kick the ball minigame
-game5 proc
-	;instructions
-	jmp setInfo
-	mov edx,OFFSET g5
-	call WriteString
-	mov eax,456
-	call Delay
-
-	;game 
-	jmp startTime
-	je action5
-	mov eax, 456
-	call Delay
-	jmp board
-	je endTime
-
-	;go to next game
-	jmp board
-	jmp game1
-game5 endp
 
 end main
