@@ -52,7 +52,7 @@ over6 byte "|||||___||||  |||||___||||",0
 over7 byte " \||||||||/    \||||||||/ ",0
 
 ;script
-welcome byte "WELCOME TOᵂ WORSE FOR WARE",0 
+welcome byte "WELCOME TO WORSE FOR WARE",0 
 controls byte "All actions are completed with the action button (any key)"
 g1 byte "CROSS THE STREET",0
 ;g2 BTYE "FIND THE SUSPECT",0
