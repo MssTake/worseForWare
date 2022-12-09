@@ -77,23 +77,23 @@ main proc
 	mov lives,edx
 
 	;welcome screen
-	jmp board
-	jmp setInfo
+	je board
+	je setInfo
 	mov edx,OFFSET welcome
 	call WriteString
 	mov eax,1374
 	call Delay
 
 	;instructions
-	jmp board
-	jmp setInfo
+	je board
+	je setInfo
 	mov edx,OFFSET controls
 	call WriteString
 	mov eax,1374
 	call Delay
 
 	;start game
-	jmp board
+	je board
 	jmp game1
 main endp
 
@@ -102,7 +102,7 @@ main endp
 ;cross the street minigame
 game1 proc
 	;instructions
-	jmp setInfo
+	je setInfo
 	mov edx,OFFSET g1
 	call WriteString
 	mov eax, 456
@@ -112,37 +112,37 @@ game1 proc
 	mov dl,40
 	mov dh,7
 	je action1
-	jmp board
+	je board
 	je action1
-	jmp board
+	je board
 	je action1
-	jmp board
+	je board
 	je action1
-	jmp board
+	je board
 	je action1
-	jmp board
+	je board
 	je action1
-	jmp board
+	je board
 	je action1
-	jmp board
+	je board
 	je action1
-	jmp board
+	je board
 	je action1
-	jmp board
+	je board
 	je action1
 	mov eax, 456
 	call Delay
-	jmp board
+	je board
 	je endTime
 	;go to next game
-	jmp board
+	je board
 	jmp game3
 game1 endp
 
 ;find the suspect minigame
 ;game2 proc
 	;instructions
-;	jmp setInfo
+;	je setInfo
 ;	mov edx,OFFSET g2
 ;	call WriteString
 ;	mov eax, 456
@@ -153,7 +153,7 @@ game1 endp
 ;feed the dog minigame
 game3 proc
 	;instructions
-	jmp setInfo
+	je setInfo
 	mov edx,OFFSET g3
 	call WriteString
 	mov eax, 456
@@ -167,17 +167,17 @@ game3 proc
 	je action3
 	mov eax, 456
 	call Delay
-	jmp board
+	je board
 	je endTime
 	;go to next game
-	jmp board
+	je board
 	jmp game4
 game3 endp
 
 ;present the speech minigame
 game4 proc
 	;instructions
-	jmp setInfo
+	je setInfo
 	mov edx,OFFSET g4
 	call WriteString
 	mov eax, 456
@@ -191,17 +191,17 @@ game4 proc
 	je action4
 	mov eax, 456
 	call Delay
-	jmp board
+	je board
 	je endTime
 	;go to next game
-	jmp board
+	je board
 	jmp game5
 game4 endp
 
 ;kick the ball minigame
 game5 proc
 	;instructions
-	jmp setInfo
+	je setInfo
 	mov edx,OFFSET g5
 	call WriteString
 	mov eax,456
@@ -211,10 +211,10 @@ game5 proc
 	je action5
 	mov eax, 456
 	call Delay
-	jmp board
+	je board
 	je endTime
 	;go to next game
-	jmp board
+	je board
 	jmp game1
 game5 endp
 
@@ -226,7 +226,7 @@ action1:
 	call ReadChar
 	mov inputChar,al
 	;program writes action
-	jmp setGame
+	je setGame
 	mov edx,OFFSET unit
 	call WriteString
 ret
@@ -237,7 +237,7 @@ ret
 ;	call ReadChar
 ;	mov inputChar,al
 ;	;program writes action
-;	jmp setGame
+;	je setGame
 ;	mov edx,OFFSET unit
 ;	call WriteString
 ;ret
@@ -249,7 +249,7 @@ action3:
 	mov inputChar,al
 
 	;program writes action
-	jmp setGame
+	je setGame
 	mov edx,OFFSET unit
 	call WriteString
 ret
@@ -261,7 +261,7 @@ action4:
 	mov inputChar,al
 
 	;program writes action
-	jmp setGame
+	je setGame
 	mov edx,OFFSET speech
 	call WriteString
 ret
@@ -273,7 +273,7 @@ action5:
 	mov inputChar,al
 
 	;program writes action
-	jmp setGame
+	je setGame
 	mov edx,OFFSET ball
 	call WriteString
 	mov eax, 456
@@ -317,9 +317,9 @@ timer endp
 ;player loses a life
 lose proc
 	;show lost a life message
-	jmp setBoard
-	jmp board
-	jmp setInfo
+	je setBoard
+	je board
+	je setInfo
 	mov dh,1
 	call GotoXY
 	mov edx,OFFSET lose7
@@ -355,8 +355,8 @@ lose proc
 	mov eax, 456
 	call Delay
 	;show previous lives
-	jmp board
-	jmp setInfo
+	je board
+	je setInfo
 	mov edx, OFFSET lives
 	call WriteString
 	mov eax, 456
@@ -366,8 +366,8 @@ lose proc
 	sub edx,1
 	mov lives,edx
 	;show current lives
-	jmp board
-	jmp setInfo
+	je board
+	je setInfo
 	mov edx, OFFSET lives
 	call WriteString
 	mov eax, 456
@@ -377,18 +377,18 @@ lose proc
 		jmp lost
 	;else send to game1
 	.else
-		jmp setInfo
+		je setInfo
 		mov edx, OFFSET retGame1
 		call WriteString
 		mov eax, 1000
 		call Delay
-		jmp board
-		jmp setInfo
+		je board
+		je setInfo
 		mov edx, OFFSET retGame2
 		call WriteString
 		mov eax, 1000
 		call Delay
-		jmp board
+		je board
 		jmp game1
 	.endif
 lose endp
@@ -396,18 +396,18 @@ lose endp
 ;you lost the game
 lost proc
 	;show final score
-	jmp setBoard
-	jmp board
-	jmp setInfo
+	je setBoard
+	je board
+	je setInfo
 	mov edx, OFFSET finalScore
 	call WriteString
-	jmp setInfo
+	je setInfo
 	mov edx,score
 	call WriteString
 	;lose game message
-	jmp setBoard
-	jmp board
-	jmp setInfo
+	je setBoard
+	je board
+	je setInfo
 	mov dh,1
 	call GotoXY
 	mov edx,OFFSET over7
@@ -448,47 +448,47 @@ lost endp
 ;formatting-------------------------------------
 
 ;info text format
-setInfo proc
+setInfo:
 	mov eax, green
 	call SetTextColor
 	mov dl,40
 	mov dh,7
 	call GotoXY
-setInfo endp
+ret
 
 ;gameplay text format
-setGame proc
+setGame:
     mov eax, yellow
 	call SetTextColor
 	mov dl,40
 	mov dh,3
 	call GotoXY
-setGame endp
+ret
 
 ;board textformat
-setBoard proc
+setBoard:
 	mov eax, yellow
 	call SetTextColor
 	mov dl,1
-setBoard endp
+ret
 
 ;game board
-board proc
+board:
 	call Clrscr
 	;top row
-	jmp setBoard
+	je setBoard
 	mov dh,17
 	call GotoXY
 	mov edx,OFFSET row
 	call WriteString
 	;bottom row
-    jmp setBoard
+    je setBoard
 	mov dh,7
 	call GotoXY
 	mov edx,OFFSET row
 	call WriteString
 	;the two Ws
-	jmp setBoard
+	je setBoard
 	mov dh,1
 	call GotoXY
 	mov edx,OFFSET bottom6
@@ -517,6 +517,6 @@ board proc
 	call GotoXY
 	mov edx,OFFSET bottom1
 	call WriteString
-board endp
+ret
 
 end main
